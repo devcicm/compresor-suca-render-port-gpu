@@ -1,0 +1,18 @@
+name: SUCA GPU Lab CI
+on:
+  push:
+  pull_request:
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build
+        run: dotnet build src/SucaGpuLab/SucaGpuLab.csproj -c Release
+      - name: Self-test
+        run: dotnet run --project src/SucaGpuLab/SucaGpuLab.csproj -c Release --no-build -- selftest
+      - name: CPU baseline
+        run: dotnet run --project src/SucaGpuLab/SucaGpuLab.csproj -c Release --no-build -- bench 64 5
