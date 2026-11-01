@@ -26,14 +26,14 @@ internal static class TextureLayout
         {
             int w = Math.Max(1, descriptor.Width >> level);
             int h = Math.Max(1, descriptor.Height >> level);
-            total = checked(total + descriptor.Format switch
+            total = checked(total + (descriptor.Format switch
             {
                 TextureFormat.Rgba8 => checked((long)w * h * 4),
                 TextureFormat.Bc1 => checked(((long)(w + 3) / 4) * ((long)(h + 3) / 4) * 8),
                 TextureFormat.Bc3 or TextureFormat.Bc7 or TextureFormat.Astc4x4
                     => checked(((long)(w + 3) / 4) * ((long)(h + 3) / 4) * 16),
                 _ => throw new ArgumentOutOfRangeException(nameof(descriptor))
-            });
+            }));
         }
         return total;
     }
